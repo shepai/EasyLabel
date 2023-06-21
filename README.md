@@ -33,6 +33,8 @@ for i in range(0,len(label.images)//2):
     label.save("filename1")
 ```
 
+<img src="Example assets/autolabel.png" width="25%">
+
 ## Merging data
 If you label 10 points in image one and 11 in image two these will not match and you will get an assertion error. This will require you to start from image two and make a new dataset. Then you will want to merge them. After loading your video file, you can select the files and from waht indicies to save data.
 
