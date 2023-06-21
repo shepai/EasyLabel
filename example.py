@@ -4,7 +4,7 @@ label=el.plotter()
 label.load_dataset("/Example video/push.avi")
 
 #label half the dataset
-for i in range(15,len(label.images)//2):
+for i in range(0,len(label.images)//2):
     label.autoplot(i)
     label.save("filename1")
 #label the other half
