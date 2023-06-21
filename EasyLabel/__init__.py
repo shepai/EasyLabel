@@ -86,6 +86,7 @@ class plotter:
             print(len(self.points),len(self.all_points[0]))
             assert len(self.points)==len(self.all_points[0]), "Arrays not the same length"
         self.all_points.append(self.points)
+        print("Point length:",len(self.points))
     def view(self,filename,dataset_num,i=0,mode=0):
         """
         @param filename to load points
@@ -125,7 +126,7 @@ class plotter:
             elif len(points[0])==len(ar[0]): #if next images
                 ar+=list(points)
                 images_+=self.images[images[i]:images[i]+len(points)]
-            else: print("Not same format",i,len(points[0]))
+            else: print("Not same format:",i,len(points[0]))
         ar=np.array(ar)
         images_=np.array(images_)
         for i in range(len(images_)):
@@ -163,7 +164,7 @@ class plotter:
             for i,im in enumerate(images):
                 #get random translation
                 im=copy.deepcopy(images[i])
-                im=self.saturate(im)
+                #im=self.saturate(im)
                 x_shift=random.randint(-30,30)
                 y_shift=random.randint(-30,30)
                 brightness=random.randint(-15,15)
@@ -185,6 +186,7 @@ class plotter:
         new_data=np.array(new_data)
         np.save(new_file,new_points)
         np.save(new_file+"images",new_data)
+        print("Augmented dataset size:",len(new_data))
     def mergeImage(self,pointnames,imagenames,name="all"):
         images=None
         points=None
@@ -196,33 +198,5 @@ class plotter:
             next_i=np.load(imagenames[i+1])
             images=np.concatenate((images,next_i))
             points=np.concatenate((points,next))
-        print(images.shape,points.shape)
         np.save(name,points)
         np.save(name+"images",images)
-p=plotter()
-p.load_dataset("C:/Users/dexte/github/RoboSkin/Assets/Video demos/test.avi")
-path="C:/Users/dexte/OneDrive/Documents/AI/Data_Labeller/files/"
-
-
-##########Create datasets###############################
-#p.merge([path+"test3_10a.npy",path+"test3_22.npy"],[10,22],path+"new_move")
-#p.merge([path+"testnew_tactip0.npy",path+"testnew_tactip5.npy",path+"testnew_tactip10.npy",path+"testnew_tactip15.npy"],[0,5,10,15],path+"new_tactip")
-p.merge([path+"testnew_tactip15.npy"],[15],path+"new_tactip")
-p.augment(path+"new_tactip.npy",path+"new_tactipimages.npy",10,path+"augmented")
-#p.merge([path+"testnew_tactip5.npy",path+"testnew_tactip10.npy"],[0,5],path+"new_tactip_multi")
-##########merge datasets################################
-#p.mergeImage([path+"new_tactip.npy",path+"new_move.npy"],[path+"new_tactipimages.npy",path+"new_moveimages.npy"],path+"all")
-#p.augment(path+"all.npy",path+"allimages.npy",10,path+"augmented2")
-"""print(len(np.load(path+"new_tactip.npy")))
-for i in range(0,len(np.load(path+"new_tactip.npy"))):
-    p.view(path+"new_tactip.npy",path+"new_tactipimages.npy",i=i,mode=0)
-    plt.pause(0.5)#"""
-
-#left on 50 ffrom movment3
-"""for i in range(15,len(p.images)):
-    p.autoplot(i)
-    p.save()
-
-#print(p.all_points)#"""
-
-#"""
