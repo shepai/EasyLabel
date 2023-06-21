@@ -179,6 +179,7 @@ class plotter:
                 shifted=cv2.warpAffine(im,M,(im.shape[1],im.shape[0])) #shift
                 p[:,1]=p[:,1]+y_shift
                 p[:,0]=p[:,0]+x_shift
+                shifted,p=self.resize_and_crop(shifted,p,random.choice([1,1,1,1,1.1,1.2,1.3]))
                 new_points.append(copy.deepcopy(p))
                 new_data.append(copy.deepcopy(shifted))
         #save all the data
@@ -200,3 +201,28 @@ class plotter:
             points=np.concatenate((points,next))
         np.save(name,points)
         np.save(name+"images",images)
+    def resize_and_crop(self,image, points,scale_factor):
+        # Read the image
+        # Get the original size
+        original_height, original_width, _ = image.shape
+
+        # Calculate the new size
+        new_width = int(original_width * scale_factor)
+        new_height = int(original_height * scale_factor)
+
+        # Resize the image
+        resized_image = cv2.resize(image, (new_width, new_height))
+
+        # Calculate the cropping parameters
+        left = (new_width - original_width) // 2
+        top = (new_height - original_height) // 2
+        right = left + original_width
+        bottom = top + original_height
+
+        # Crop the image
+        cropped_image = resized_image[top:bottom, left:right]
+        p=points*scale_factor
+        #p=(p.reshape((p.shape[0]//2,2))*255/SIZE)
+        p[:,0]=p[:,0]-left
+        p[:,1]=p[:,1]-top
+        return cropped_image,p
