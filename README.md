@@ -1,6 +1,8 @@
 # EasyLabel
 EasyLabel is a python script to make data labelling easier. Though software similar to this exists it was just easier to make one. It is here for the community if anyone wishes to label data without hassle
 
+<img src="Example assets/image.png" width="25%">
+
 ## Labelling data
 Firstly we want to call in a dataset. This has been set up to read image files using cv2. 
 ```

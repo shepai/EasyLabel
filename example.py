@@ -1,7 +1,7 @@
 import EasyLabel as el
 
 label=el.plotter()
-label.load_dataset("/Example video/push.avi")
+label.load_dataset("/Example assets/push.avi")
 
 #label half the dataset
 for i in range(0,len(label.images)//2):
