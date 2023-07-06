@@ -21,12 +21,20 @@ class plotter:
             plt.scatter(p[:,0],p[:,1],c="b",s=1)
         cid = self.fig.canvas.mpl_connect('button_press_event', self.onclick)
         plt.show()
-    def autoplot(self,num=0):
+    def autoplot(self,num=0,show_change=False):
         self.points=[]
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
         self.ax.set_title(str(num))
-        self.ax.imshow(self.images[num])
+        toshow=self.images[num]
+        if show_change and num-1>=0: #if we want to pinpoint change
+            diff=np.abs(self.images[num-1]-self.images[num])
+            diff=np.dot(diff[...,:3], [0.2989, 0.5870, 0.1140])
+            diff[diff>100]=255
+            diff[diff<100]=0
+            diff=diff.astype(np.uint8)
+            toshow[:,:,0]+=diff
+        self.ax.imshow(toshow)
         if len(self.all_points)>0: #past points placed
             p=np.array(self.all_points[-1])
             plt.scatter(p[:,0],p[:,1],c="b",s=1)
@@ -180,6 +188,8 @@ class plotter:
                 p[:,1]=p[:,1]+y_shift
                 p[:,0]=p[:,0]+x_shift
                 shifted,p=self.resize_and_crop(shifted,p,random.choice([1,1,1,1,1.1,1.2,1.3]))
+                shifted[shifted>255]=255
+                shifted[shifted<0]=0
                 new_points.append(copy.deepcopy(p))
                 new_data.append(copy.deepcopy(shifted))
         #save all the data
